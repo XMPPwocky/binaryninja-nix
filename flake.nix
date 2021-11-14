@@ -2,7 +2,7 @@
   description = "Unofficial Binary Ninja package";
 
   outputs = { self, nixpkgs }:
-    let fhsDeriv = (
+    let fhs = (
       let
         bn-python = nixpkgs.legacyPackages.x86_64-linux.python39.withPackages (p: with p; [
           colorama
@@ -54,8 +54,7 @@
       })
     ); in
     {
-      defaultPackage.x86_64-linux = fhsDeriv;
-      defaultApp.x86_64-linux = fhsDeriv;
-      devShell.x86_64-linux = fhsDeriv.env;
+      defaultPackage.x86_64-linux = fhs;
+      defaultApp.x86_64-linux = fhs;
     };
 }
