@@ -6,9 +6,9 @@
       let
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
 
-        bn-python = pkgs.python39.withPackages (p: with p; [
+        bn-python = pkgs.python39.withPackages (p: with p; ([
           pip
-        ] ++ (extraPythonPackages p));
+        ] ++ (extraPythonPackages p)));
       in
       (pkgs.buildFHSUserEnv {
         name = "binaryninja";
