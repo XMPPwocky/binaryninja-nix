@@ -2,15 +2,15 @@
   description = "Unofficial Binary Ninja package";
 
   outputs = { self, nixpkgs }:
-    let makeBinjaWrapper = { binaryNinjaPath }: (
+    let makeBinjaWrapper = { binaryNinjaPath, extraPythonPackages ? (p: []), extraPackages ? [] }: (
       let
-        bn-python = nixpkgs.legacyPackages.x86_64-linux.python39.withPackages (p: with p; [
-          colorama
-          pwntools
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+
+        bn-python = pkgs.python39.withPackages (p: with p; [
           pip
-        ]);
+        ] ++ (extraPythonPackages p));
       in
-      (nixpkgs.legacyPackages.x86_64-linux.buildFHSUserEnv {
+      (pkgs.buildFHSUserEnv {
         name = "binaryninja";
         runScript = "${binaryNinjaPath}/binaryninja";
         targetPkgs = nixpkgs: (with nixpkgs;
@@ -50,7 +50,7 @@
             xcbutilimage
             xcbutilkeysyms
             xcbutilrenderutil
-          ]);
+          ] ++ extraPackages);
       })
     ); in
     {
