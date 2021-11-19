@@ -2,7 +2,7 @@
   description = "Unofficial Binary Ninja package";
 
   outputs = { self, nixpkgs }:
-    let fhs = (
+    let makeBinjaWrapper = { binaryNinjaPath }: (
       let
         bn-python = nixpkgs.legacyPackages.x86_64-linux.python39.withPackages (p: with p; [
           colorama
@@ -11,8 +11,8 @@
         ]);
       in
       (nixpkgs.legacyPackages.x86_64-linux.buildFHSUserEnv {
-        name = "binaryninja-fhs";
-        runScript = "./binaryninja/binaryninja";
+        name = "binaryninja";
+        runScript = "${binaryNinjaPath}/binaryninja";
         targetPkgs = nixpkgs: (with nixpkgs;
           [
             stdenv.cc.cc
@@ -54,7 +54,6 @@
       })
     ); in
     {
-      defaultPackage.x86_64-linux = fhs;
-      defaultApp.x86_64-linux = fhs;
+      makeBinjaWrapper = makeBinjaWrapper;
     };
 }
